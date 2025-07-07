@@ -12,8 +12,9 @@ from datetime import datetime
 from typing import Dict, List, Tuple, Any
 
 class AnalyseurAudit:
-    def __init__(self):
-        self.logger = logging.getLogger(__name__)
+    def __init__(self, b, logger=None):
+        self.begin = b
+        self.logger = logger if logger else logging.getLogger(__name__)
         self.resultats_analyse = {}
         self.score_securite = 0
         self.score_max = 100
@@ -581,11 +582,11 @@ class AnalyseurAudit:
     def sauvegarder_analyse(self, format_sortie="json"):
         """Sauvegarde l'analyse dans un fichier"""
         if format_sortie == "json":
-            nom_fichier = f"analyse_securite_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+            nom_fichier = f"outputs/analyse_securite_{self.begin}/{self.begin}.json"
             with open(nom_fichier, 'w', encoding='utf-8') as f:
                 json.dump(self.resultats_analyse, f, indent=2, ensure_ascii=False)
         else:
-            nom_fichier = f"analyse_securite_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
+            nom_fichier = f"outputs/analyse_securite_{self.begin}/{self.begin}.txt"
             with open(nom_fichier, 'w', encoding='utf-8') as f:
                 self.ecrire_rapport_texte(f)
         

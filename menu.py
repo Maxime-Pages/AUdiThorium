@@ -52,7 +52,10 @@ class Menu:
         elif choice == 3: # complet
             self.executer_audits_complets()
             input("(appuyez sur entrée)")
-        elif choice == 4: # afficher
+        elif choice == 4: # analyser
+            self.executer_audit_analyse()
+            input("(appuyez sur entrée)")
+        elif choice == 5: # afficher
             self.afficher_resultats()
             input("(appuyez sur entrée)")
 
@@ -179,6 +182,25 @@ class Menu:
         
         return succes_systeme or succes_apache
     
+    def executer_audit_analyse(self):
+        """Exécute l'analyse des résultats d'audit"""
+        print("\n" + "="*60)
+        print("DÉMARRAGE DE L'ANALYSE DES RÉSULTATS D'AUDIT")
+        print("="*60)
+        
+        self.logger.info("Démarrage de l'analyse des résultats d'audit")
+        
+        try:
+            analyseur = AnalyseurAudit(self.begin, self.logger)
+            analyseur.analyser_complet("outputs/logs_{self.begin}/{self.begin}_audit_systeme.json","outputs/logs_{self.begin}/{self.begin}_audit_apache.json")
+            analyseur.analyser()
+            print("✅ Analyse des résultats terminée avec succès")
+            self.logger.info("Analyse des résultats terminée avec succès")
+        except Exception as e:
+            print(f"❌ Erreur lors de l'analyse des résultats: {e}")
+            self.logger.error(f"Erreur lors de l'analyse des résultats: {e}")
+    
+    
     def afficher_resultats(self):
         """Affiche les résultats des derniers audits"""
         print("\n" + "="*60)
@@ -229,20 +251,21 @@ class Menu:
             choice = input("""AUdiThorium:
 1. Audit Système seul
 2. Audit Apache seul
-3. Audit Sytèe & Apache
-4. Afficher les résultats
-5. A propos
-6. Quitter
+3. Audit Sytsème & Apache
+4. Analyse Auto des résultats
+5. Afficher les résultats
+6. A propos
+7. Quitter
 > """)
             try:
                 choice = int(choice)
             except Exception:
                 continue
-            if choice >= 1 and choice <= 4:
+            if choice >= 1 and choice <= 5:
                 self.audit(choice)
-            elif choice == 5:
-                about()
             elif choice == 6:
+                about()
+            elif choice == 7:
                 break
 
 def main():
