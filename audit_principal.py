@@ -257,9 +257,10 @@ class AuditPrincipal:
         self.logger.info("Démarrage de l'analyse des résultats d'audit")
         
         try:
-            analyseur = AnalyseurAudit(self.resultats_globaux["systeme"]["fichier_json"],
-                                      self.resultats_globaux["apache"]["fichier_json"])
-            analyseur.analyser()
+            analyseur = AnalyseurAudit()
+            analyseur.charger_resultats_audit("audit_systeme.json", "audit_apache.json")
+            analyseur.analyser_complet()
+            analyseur.sauvegarder_analyse()
             print("✅ Analyse des résultats terminée avec succès")
             self.logger.info("Analyse des résultats terminée avec succès")
         except Exception as e:
