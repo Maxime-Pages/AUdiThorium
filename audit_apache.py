@@ -341,11 +341,11 @@ class AuditApache:
     def sauvegarder_resultats(self, format_sortie="json"):
         """Sauvegarde les résultats dans un fichier"""
         if format_sortie == "json":
-            nom_fichier = "audit_apache.json"
+            nom_fichier = f"outputs/logs_{self.begin}/{self.begin}_audit_apache.json"
             with open(nom_fichier, 'w', encoding='utf-8') as f:
                 json.dump(self.resultats, f, indent=2, ensure_ascii=False)
         else:
-            nom_fichier = "audit_apache.txt"
+            nom_fichier = f"outputs/logs_{self.begin}/{self.begin}_audit_apache.txt"
             with open(nom_fichier, 'w', encoding='utf-8') as f:
                 f.write(f"AUDIT SERVEUR APACHE - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
                 f.write("="*60 + "\n\n")
