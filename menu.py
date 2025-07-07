@@ -52,6 +52,10 @@ class Menu:
         elif choice == 3: # complet
             self.executer_audits_complets()
             input("(appuyez sur entrée)")
+        elif choice == 4: # afficher
+            self.afficher_resultats()
+            input("(appuyez sur entrée)")
+
             
     def audit_system(self):
         print("\n" + "="*60)
@@ -197,9 +201,11 @@ class Menu:
         # Vérification des fichiers existants
         print("\nFICHIERS D'AUDIT PRÉSENTS:")
         fichiers_audit = [
-            "audit_systeme.json", "audit_systeme.txt",
-            "audit_apache.json", "audit_apache.txt",
-            "audit.log"
+            f"outputs/logs_{self.begin}/{self.begin}_audit_systeme.json",
+            f"outputs/logs_{self.begin}/{self.begin}_audit_systeme.txt",
+            f"outputs/logs_{self.begin}/{self.begin}_audit_apache.json", 
+            f"outputs/logs_{self.begin}/{self.begin}_audit_apache.txt",
+            f"outputs/logs_{self.begin}/{self.begin}_audit.log"
         ]
         
         for fichier in fichiers_audit:
@@ -208,7 +214,6 @@ class Menu:
                 print(f"     {fichier} ({taille} octets)")
             else:
                 print(f"     {fichier} (non trouvé)")
-        input("(appuyez sur entrée)")
     
     
     def executer(self):
@@ -219,18 +224,19 @@ class Menu:
 1. Audit Système seul
 2. Audit Apache seul
 3. Audit Sytèe & Apache
-4. A propos
-5. Quitter
+4. Afficher les résultats
+5. A propos
+6. Quitter
 > """)
             try:
                 choice = int(choice)
             except Exception:
                 continue
-            if choice >= 1 and choice <= 3:
+            if choice >= 1 and choice <= 4:
                 self.audit(choice)
-            elif choice == 4:
-                about()
             elif choice == 5:
+                about()
+            elif choice == 6:
                 break
 
 def main():
