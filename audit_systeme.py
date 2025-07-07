@@ -31,6 +31,11 @@ class AuditSysteme:
             self.logger.error(f"Erreur lors de l'exécution de {commande}: {e}")
             return "", str(e), 1
     
+    def install_dependencies(self):
+        self.logger.info("Installation des dépendances nécessaires pour l'audit système")
+        self.executer_commande("apt-get update")
+        self.executer_commande("apt-get install -y procps coreutils util-linux grep hostname iproute2 net-tools passwd gawk sudo")
+        self.logger.info("Dépendances installées avec succès")
     def audit_informations_systeme(self):
         """Collecte les informations générales du système"""
         info_systeme = {}
@@ -233,6 +238,7 @@ class AuditSysteme:
         self.logger.info("Début de l'audit système Linux")
         
         try:
+            self.install_dependencies()
             self.audit_informations_systeme()
             self.audit_utilisateurs()
             self.audit_services()
