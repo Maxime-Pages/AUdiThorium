@@ -110,7 +110,7 @@ class Menu:
         self.logger.info("Démarrage de l'audit Apache")
         
         try:
-            audit_apache = AuditApache()
+            audit_apache = AuditApache(self.begin, self.logger)
             
             print("Collecte des informations Apache en cours...")
             succes = audit_apache.executer_audit_complet()
