@@ -192,7 +192,7 @@ class Menu:
         
         try:
             analyseur = AnalyseurAudit(self.begin, self.logger)
-            analyseur.analyser_complet("outputs/logs_{self.begin}/{self.begin}_audit_systeme.json","outputs/logs_{self.begin}/{self.begin}_audit_apache.json")
+            analyseur.analyser_complet(f'outputs/logs_{self.begin}/{self.begin}_audit_systeme.json',f'outputs/logs_{self.begin}/{self.begin}_audit_apache.json')
             print("✅ Analyse des résultats terminée avec succès")
             self.logger.info("Analyse des résultats terminée avec succès")
         except Exception as e:
