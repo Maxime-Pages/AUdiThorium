@@ -582,11 +582,11 @@ class AnalyseurAudit:
     def sauvegarder_analyse(self, format_sortie="json"):
         """Sauvegarde l'analyse dans un fichier"""
         if format_sortie == "json":
-            nom_fichier = f"outputs/analyse_securite_{self.begin}/{self.begin}.json"
+            nom_fichier = f"outputs/logs_{self.begin}/{self.begin}_analyse_securite.json"
             with open(nom_fichier, 'w', encoding='utf-8') as f:
                 json.dump(self.resultats_analyse, f, indent=2, ensure_ascii=False)
         else:
-            nom_fichier = f"outputs/analyse_securite_{self.begin}/{self.begin}.txt"
+            nom_fichier = f"outputs/logs_{self.begin}/{self.begin}_analyse_securite.txt"
             with open(nom_fichier, 'w', encoding='utf-8') as f:
                 self.ecrire_rapport_texte(f)
         
@@ -601,10 +601,10 @@ class AnalyseurAudit:
         fichier.write("║                           RAPPORT D'ANALYSE DE SÉCURITÉ                       ║\n")
         fichier.write("╚════════════════════════════════════════════════════════════════════════════════╝\n\n")
         
-        fichier.write(f"📅 Date d'analyse: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
-        fichier.write(f"🔒 Score de sécurité: {rapport['score_securite']}/100\n")
-        fichier.write(f"📊 Niveau de sécurité: {rapport['couleur']} {rapport['niveau_securite']}\n")
-        fichier.write(f"⚠️  Total des vulnérabilités: {rapport['total_vulnerabilites']}\n\n")
+        fichier.write(f"Date d'analyse: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+        fichier.write(f"Score de sécurité: {rapport['score_securite']}/100\n")
+        fichier.write(f"Niveau de sécurité: {rapport['couleur']} {rapport['niveau_securite']}\n")
+        fichier.write(f"Total des vulnérabilités: {rapport['total_vulnerabilites']}\n\n")
         
         fichier.write("═══════════════════════════════════════════════════════════════════════════════\n")
         fichier.write("                            RÉPARTITION DES VULNÉRABILITÉS\n")
