@@ -21,7 +21,7 @@ class Menu:
         logger.setLevel(logging.INFO)
         
         # Création du handler pour le fichier de log
-        os.system(f"mkdir outputs/logs_{self.begin}")
+        os.system(f"mkdir -p outputs/logs_{self.begin}")
         log_handler = logging.FileHandler(f'outputs/logs_{self.begin}/{self.begin}_audit.log', mode='a', encoding='utf-8')
         log_handler.setLevel(logging.INFO)
         
@@ -45,6 +45,13 @@ class Menu:
     def audit(self, choice):
         if choice == 1: # systeme
             self.audit_system()
+            input("(appuyez sur entrée)")
+        elif choice == 2: # apache
+            self.executer_audit_apache()
+            input("(appuyez sur entrée)")
+        elif choice == 3: # complet
+            self.executer_audits_complets()
+            input("(appuyez sur entrée)")
             
     def audit_system(self):
         print("\n" + "="*60)
@@ -79,18 +86,130 @@ class Menu:
                 }
                 
                 self.logger.info("Audit système terminé avec succès")
-                input("(appuyez sur entrée)")
                 return True
             else:
                 print("Erreur lors de l'audit système")
                 self.logger.error("Erreur lors de l'audit système")
-                input("(appuyez sur entrée)")
                 return False
                 
         except Exception as e:
             print(f"Erreur critique lors de l'audit système: {e}")
             self.logger.error(f"Erreur critique lors de l'audit système: {e}")
             return False
+    
+    def executer_audit_apache(self):
+        """Exécute l'audit Apache"""
+        print("\n" + "="*60)
+        print("DÉMARRAGE DE L'AUDIT APACHE")
+        print("="*60)
+        
+        self.logger.info("Démarrage de l'audit Apache")
+        
+        try:
+            audit_apache = AuditApache()
+            
+            print("Collecte des informations Apache en cours...")
+            succes = audit_apache.executer_audit_complet()
+            
+            if succes:
+                print("Audit Apache terminé avec succès")
+                
+                # Sauvegarde des résultats
+                fichier_json = audit_apache.sauvegarder_resultats("json")
+                fichier_txt = audit_apache.sauvegarder_resultats("txt")
+                
+                print(f"Résultats sauvegardés dans:")
+                print(f"   - {fichier_json}")
+                print(f"   - {fichier_txt}")
+                
+                # Stockage des résultats pour le résumé
+                self.resultats_globaux["apache"] = {
+                    "succes": True,
+                    "fichier_json": fichier_json,
+                    "fichier_txt": fichier_txt,
+                    "timestamp": datetime.now().isoformat()
+                }
+                
+                print("Audit Apache terminé avec succès")
+                self.logger.info("Audit Apache terminé avec succès")
+                return True
+            else:
+                print("Erreur lors de l'audit Apache")
+                self.logger.error("Erreur lors de l'audit Apache")
+                return False
+                
+        except Exception as e:
+            print(f"Erreur critique lors de l'audit Apache: {e}")
+            self.logger.error(f"Erreur critique lors de l'audit Apache: {e}")
+            return False
+    
+    def executer_audits_complets(self):
+        """Exécute les deux audits"""
+        print("\n" + "="*60)
+        print("DÉMARRAGE DES AUDITS COMPLETS")
+        print("="*60)
+        
+        self.logger.info("Démarrage des audits complets (système + Apache)")
+        
+        succes_systeme = self.audit_system()
+        succes_apache = self.executer_audit_apache()
+        
+        print("\n" + "="*60)
+        print("RÉSUMÉ DES AUDITS")
+        print("="*60)
+        
+        if succes_systeme and succes_apache:
+            print("Tous les audits ont été exécutés avec succès")
+            self.logger.info("Tous les audits terminés avec succès")
+        elif succes_systeme:
+            print("Audit système: Succès")
+            print("Audit Apache: Échec")
+            self.logger.warning("Audit système réussi, audit Apache échoué")
+        elif succes_apache:
+            print("Audit système: Échec")
+            print("Audit Apache: Succès")
+            self.logger.warning("Audit Apache réussi, audit système échoué")
+        else:
+            print("Tous les audits ont échoué")
+            self.logger.error("Tous les audits ont échoué")
+        
+        return succes_systeme or succes_apache
+    
+    def afficher_resultats(self):
+        """Affiche les résultats des derniers audits"""
+        print("\n" + "="*60)
+        print("RÉSULTATS DES DERNIERS AUDITS")
+        print("="*60)
+        
+        if not self.resultats_globaux:
+            print("Aucun audit n'a été exécuté dans cette session.")
+            return
+        
+        for type_audit, resultats in self.resultats_globaux.items():
+            print(f"\nAUDIT {type_audit.upper()}:")
+            print(f"   Status: {'Succès' if resultats['succes'] else 'Échec'}")
+            print(f"   Timestamp: {resultats['timestamp']}")
+            if resultats['succes']:
+                print(f"   Fichiers générés:")
+                print(f"     - {resultats['fichier_json']}")
+                print(f"     - {resultats['fichier_txt']}")
+        
+        # Vérification des fichiers existants
+        print("\nFICHIERS D'AUDIT PRÉSENTS:")
+        fichiers_audit = [
+            "audit_systeme.json", "audit_systeme.txt",
+            "audit_apache.json", "audit_apache.txt",
+            "audit.log"
+        ]
+        
+        for fichier in fichiers_audit:
+            if os.path.exists(fichier):
+                taille = os.path.getsize(fichier)
+                print(f"     {fichier} ({taille} octets)")
+            else:
+                print(f"     {fichier} (non trouvé)")
+        input("(appuyez sur entrée)")
+    
     
     def executer(self):
         while True:
