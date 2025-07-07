@@ -650,10 +650,10 @@ class AnalyseurAudit:
             return
         
         print("Résumé de l'analyse de sécurité :")
-        print(f"📅 Date : {self.resultats_analyse['timestamp']}")
-        print(f"🔒 Score de sécurité : {self.resultats_analyse['score_securite']}/100")
-        print(f"📊 Niveau : {self.resultats_analyse['couleur']} {self.resultats_analyse['niveau_securite']}")
-        print(f"⚠️  Vulnérabilités détectées : {self.resultats_analyse['total_vulnerabilites']}")
+        print(f"Date : {self.resultats_analyse['timestamp']}")
+        print(f"Score de sécurité : {self.resultats_analyse['score_securite']}/100")
+        print(f"Niveau : {self.resultats_analyse['couleur']} {self.resultats_analyse['niveau_securite']}")
+        print(f"Vulnérabilités détectées : {self.resultats_analyse['total_vulnerabilites']}")
         print("Répartition :")
         for niveau, total in self.resultats_analyse['repartition'].items():
             icone = {
