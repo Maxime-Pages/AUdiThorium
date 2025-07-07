@@ -205,3 +205,9 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# audit
+audit_systeme.json
+audit_systeme.txt
+audit_apache.json
+audit_apache.txt
