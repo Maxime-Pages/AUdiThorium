@@ -187,6 +187,12 @@ class Menu:
         
         if not self.resultats_globaux:
             print("Aucun audit n'a été exécuté dans cette session.")
+
+            fichier = f"outputs/logs_{self.begin}/{self.begin}_audit.log"
+            if os.path.exists(fichier):
+                print("\nFICHIERS D'AUDIT PRÉSENTS:")
+                taille = os.path.getsize(fichier)
+                print(f"     {fichier} ({taille} octets)")
             return
         
         for type_audit, resultats in self.resultats_globaux.items():
