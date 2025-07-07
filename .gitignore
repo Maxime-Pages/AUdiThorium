@@ -207,7 +207,8 @@ marimo/_lsp/
 __marimo__/
 
 # audit
-audit_systeme.json
-audit_systeme.txt
-audit_apache.json
-audit_apache.txt
+audit_systeme*.json
+audit_systeme*.txt
+audit_apache*.json
+audit_apache*.txt
+outputs/*

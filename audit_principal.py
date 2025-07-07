@@ -88,7 +88,7 @@ class AuditPrincipal:
         """Valide le choix de l'utilisateur"""
         try:
             choix_int = int(choix)
-            return 1 <= choix_int <= 6
+            return 1 <= choix_int <= 7
         except ValueError:
             return False
     
@@ -403,7 +403,7 @@ def main():
     """Fonction principale"""
     # Vérification des permissions
     if os.geteuid() != 0:
-        print("⚠️  ATTENTION: Ce script nécessite des privilèges administrateur")
+        print("   ATTENTION: Ce script nécessite des privilèges administrateur")
         print("   Certaines informations peuvent être incomplètes sans sudo/root")
         print("   Recommandation: sudo python3 audit_principal.py")
         print()

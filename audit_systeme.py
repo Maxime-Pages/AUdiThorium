@@ -14,9 +14,10 @@ from datetime import datetime
 import logging
 
 class AuditSysteme:
-    def __init__(self):
+    def __init__(self, b, logger=None):
         self.resultats = {}
-        self.logger = logging.getLogger(__name__)
+        self.begin = b
+        self.logger = logger if logger else logging.getLogger(name)
         
     def executer_commande(self, commande):
         """Exécute une commande système et retourne le résultat"""
@@ -253,11 +254,11 @@ class AuditSysteme:
     def sauvegarder_resultats(self, format_sortie="json"):
         """Sauvegarde les résultats dans un fichier"""
         if format_sortie == "json":
-            nom_fichier = "audit_systeme.json"
+            nom_fichier = f"outputs/logs_{self.begin}/{self.begin}_audit_systeme.json"
             with open(nom_fichier, 'w', encoding='utf-8') as f:
                 json.dump(self.resultats, f, indent=2, ensure_ascii=False)
         else:
-            nom_fichier = "audit_systeme.txt"
+            nom_fichier = f"outputs/logs_{self.begin}/{self.begin}_audit_systeme.txt"
             with open(nom_fichier, 'w', encoding='utf-8') as f:
                 f.write(f"AUDIT SYSTÈME LINUX - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
                 f.write("="*60 + "\n\n")

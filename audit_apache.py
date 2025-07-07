@@ -12,9 +12,10 @@ from datetime import datetime
 import logging
 
 class AuditApache:
-    def __init__(self):
+    def __init__(self, logger=None):
         self.resultats = {}
-        self.logger = logging.getLogger(__name__)
+        self.begin = b
+        self.logger = logger if logger else logging.getLogger(name)
         self.apache_paths = [
             "/etc/apache2",
             "/etc/httpd",
